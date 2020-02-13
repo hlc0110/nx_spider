@@ -23,8 +23,8 @@ class spiderRedis(object):
 		return self.r.keys("*");
 
 	'''集合'''
-	def sadd(self, key, value):
-		self.r.sadd(key, value)
+	def sadd(self, key, val):
+		self.r.sadd(key, val)
 	def smembers(self, key):
 		return self.r.smembers(key)
 

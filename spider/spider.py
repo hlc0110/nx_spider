@@ -1,4 +1,4 @@
-from spiderRedis import myredis as spider_redis
+from spiderRedis.myredis import spiderRedis as spider_redis
 import requests
 import time
 from bs4 import BeautifulSoup
@@ -6,15 +6,30 @@ import common
 import sys
 from xpinyin import Pinyin
 import re
+import random
 
 
 '''add equeue'''
 def add_eq(eqKey, links = []):
+
+    '''test'''
+    # pyinyin = Pinyin()
+    # eqKey = pyinyin.get_pinyin("策略", "_")
+
+    # file = "/Users/jyair/Downloads/moni_after_sales/nx_spider/url.txt"
+    # f = open(file, 'r')
+    # urls = f.readlines()
+    # f.close()
+    # links = []
+    # for link in urls:
+    #     links.append(link.strip())
+    '''test'''
+
+
     if len(links) == 0:
         return 0
-    print(links)
-    # spider_redis.sadd(common.eq_sets_key, eqKey)	# 记录有哪些队列
-    # spider_redis.push(eqKey, links)					# 往队列里加入数据
+    spider_redis.sadd(key=common.eq_sets_key, val=eqKey)	# 记录有哪些队列
+    spider_redis.push(key=eqKey, dataList=links)					# 往队列里加入数据
     return 1
 
 def getGameLink(word, p = 1):
@@ -41,9 +56,10 @@ def getGameLink(word, p = 1):
 
     # 获取链接，保存
     links = getApplinks(soup)
-    print("当前采集链接数：" + str(len(links)))
-    exit()
+    sleep_sec = random.randint(1,20)
+    print("关键词：%s 共计 %d 页 | 当前采集第 %d页；采集链接数：%d | 休眠 %d 秒" % (word, getGameLink.total, p, len(links), sleep_sec))
     add_eq(eqKey, links)
+    time.sleep(sleep_sec)
     p = p + 1
     getGameLink(word, p)
 
@@ -65,15 +81,26 @@ def getApplinks(soup):
     links = []
     for a in soup.find_all("a", class_="search_result_row"):
         links.append(a['href'])
+
+    # 测试数据备份 start
+    file = "/Users/jyair/Downloads/moni_after_sales/nx_spider/url.txt"
+    f = open(file, 'a+')
+    for link in links:
+        f.write(link+"\n")
+    f.close()
+    # 测试数据备份 end
+
     return links
 
 def test():
-    print(spider_redis)
+    # print(spider_redis)
+    print("test")
 
 if __name__ == "__main__":
+    print("start spider...")
     startTime = common.getNow()
 
-    spider_redis = spider_redis.spiderRedis()
+    spider_redis = spider_redis()
     # test()
 
     if len(sys.argv) == 1:
@@ -88,4 +115,5 @@ if __name__ == "__main__":
         getGameLink(w)
 
     print("消耗时间:")
+    
     print(common.getNow() - startTime)

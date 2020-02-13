@@ -33,8 +33,8 @@ if __name__ == "__main__":
 			i += 1
 
 		if spider_redis.getListLen(eqKey) == 0:
-			print("	队列没有数据,休眠5秒...")
-			time.sleep(5)
+			print("	队列没有数据,休眠15秒...")
+			time.sleep(15)
 			continue
 
 		consumer(eqKey)
