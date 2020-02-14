@@ -46,4 +46,4 @@ for link in links:
 	urls.append(link.strip())
 
 spider_redis = spider_redis_ys()
-spider.add_eq(eqKey, urls)
+spider.add_eq(eqKey=eqKey, links=urls)
