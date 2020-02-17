@@ -9,8 +9,22 @@ from DB.Db import Db as mysql
 
 '''从队列里消费数据'''
 def consumer(eqKey):
-	game_url = spider_redis.pop(eqKey).decode('ascii')
-	print(game_url)
+	link = spider_redis.pop(eqKey).decode('ascii')
+	print(link)
+	r = requests.get(link)
+	sp = BeautifulSoup(r.text, 'lxml')
+
+	# 获取标题
+	app_name = sp.find("div", class_='apphub_AppName').text.replace('\'','\\\'').replace('"','\"').strip()
+	# 获取描述
+	intro = sp.find("div", class_='game_area_description').text.replace('\'','\\\'').replace('"','\"').strip()
+	appId = link.split('/')[4]
+
+	data = {
+		"appId" : appId, "app_name" : app_name, 'intro' : intro, 'link' : link
+	}
+	db = mysql("app")
+	db.insert(data)
 
 
 if __name__ == "__main__":

@@ -76,6 +76,7 @@ class Db:
         sql = "INSERT INTO `{table}` ({my_keys}) " \
               "VALUES ({my_values});". \
             format(table=self.__table, my_keys=keys, my_values=values)
+        # print(sql)
         row = self.__cursor.execute(sql)
         if row > 0:
             return row

@@ -1,3 +1,4 @@
 /spider/.idea/
-__pycache__/
-DB/__pycache__
+*__pycache__/*
+DB/
+

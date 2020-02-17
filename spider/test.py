@@ -3,6 +3,8 @@ import random
 import spider
 from spiderRedis.myredis import spiderRedis as spider_redis_ys
 from xpinyin import Pinyin
+from bs4 import BeautifulSoup
+import requests
 
 # db = mysql("app")
 # print(db.getPrikey())
@@ -13,37 +15,17 @@ from xpinyin import Pinyin
 >>> f.write('Hello, world!')
 >>> f.close()
 '''
-'''
-file = "/Users/jyair/Downloads/moni_after_sales/nx_spider/url.txt"
-f = open(file, 'a+')
-links = [
-	"http://www.jiayuan.com12345",
-	"http://www.jiayuan.com123456",
-	"http://www.jiayuan.com123457",
-	"http://www.jiayuan.com123458",
-	"http://www.jiayuan.com123459",
-	"http://www.jiayuan.com123450",
-]
 
-for link in links:
-	f.write(link+"\n")
+# url = "https://store.steampowered.com/app/730/CounterStrike_Global_Offensive/"
 
-f.close()
-'''
-
-# print(random.randint(1,10))
-
-
-pyinyin = Pinyin()
-eqKey = pyinyin.get_pinyin("策略", "_")
-
-file = "/Users/jyair/Downloads/moni_after_sales/nx_spider/url.txt"
-f = open(file, 'r')
-links = f.readlines()
-f.close()
-urls = []
-for link in links:
-	urls.append(link.strip())
-
-spider_redis = spider_redis_ys()
-spider.add_eq(eqKey=eqKey, links=urls)
+# print(url.split('/'))
+# print(url.split('/')[4])
+# 
+# 
+data = {
+		"appId" : 'appId---', "app_name" : 'app_name---', 'intro' : 'intro---', 'link' : 'link---'
+	}
+keys = ','.join('`' + str(key) + '`' for key in data.keys())
+values = ','.join('\'' + str(val) + '\'' for val in data.values())
+print(keys)
+print(values)
